@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zttx.mapper.SectionMapper" >
+	<!-- 查询最新的截面信息（包含测量人员、班组、【标段】信息） -->
+	<select id="findNewestSection" resultType="SectionCustom">
+		SELECT s.*,
+		u.username AS measurename,
+		g.groupname,
+		t.tendername
+		FROM section s
+		LEFT JOIN user u ON s.measureid = u.userid
+		LEFT JOIN _group g ON s.groupid = g.groupid
+		LEFT JOIN tender t ON t.tenderid = s.tenderid
+		WHERE distance = (SELECT MAX(distance) FROM section)
+		AND stage = (SELECT MAX(stage) FROM section)
+	</select>
+	
+	<!-- 根据里程数查询对应截面的信息 -->
+	<select id="findSectionByDistance" parameterType="SectionQueryVo" resultType="SectionCustom">
+		SELECT 
+		s.*,
+		g.groupname,
+		t.tendername
+		FROM section s
+		LEFT JOIN _group g ON s.groupid = g.groupid
+		LEFT JOIN tender t ON s.tenderid = t.tenderid
+		WHERE 1=1
+		<if test="distance != null">
+			AND ABS(distance-#{distance}) = (SELECT MIN(ABS(distance - #{distance})) FROM section)
+		</if>
+		<if test="start_distance != null and end_distance != null ">
+			AND distance &gt;= #{start_distance} AND distance &lt;= #{end_distance}
+		</if>
+		AND stage = (SELECT MAX(stage) FROM section)
+		ORDER BY distance ASC
+	</select>
+	
+	<!-- 查询对应里程段的超欠挖土方量 -->
+	<select id="findVolumeByDistance" parameterType="SectionQueryVo" resultType="SectionVolume">
+		SELECT ROUND(SUM(exceedvolume),3) exceedvolume,
+		ROUND(SUM(owevolume),3) owevolume,
+		ROUND(SUM(refervolume),3) refervolume  
+		FROM section WHERE distance &gt;= #{start_distance} AND distance &lt;= #{end_distance}
+		AND stage = (SELECT MAX(stage) FROM section)
+	</select>
+	
+	<!-- 查询对应里程段中最早一次扫描数据 -->
+	<select id="findOldSectionByDistance" parameterType="SectionQueryVo" resultType="SectionCustom">
+		SELECT * FROM section
+		WHERE 1=1
+		<if test="start_distance != null and end_distance != null ">
+			AND distance &gt;= #{start_distance} AND distance &lt;= #{end_distance}
+		</if>
+		AND stage = (SELECT MIN(stage) FROM section)
+		ORDER BY distance ASC
+	</select>
+	
+	<!-- 以下是数据对接相关方法 -->
+	<!-- 查询是否存在某截面 -->
+	<select id="isExistSection" parameterType="section" resultType="section">
+		select * from section where _sectionid = #{_sectionid}
+	</select>
+	
+	<!-- 插入新截面 -->
+	<insert id="saveSection_cop" parameterType="section">
+		insert into section(sectionid,distance,actualarea,referarea,exceedarea,owearea,refervolume,exceedvolume,owevolume,buildtime,stage,measuretime,_sectionid,measureid,tenderid,groupid)
+		values(#{sectionid},#{distance},#{actualarea},#{referarea},#{exceedarea},#{owearea},#{refervolume},#{exceedvolume},#{owevolume},#{buildtime},#{stage},#{measuretime},#{_sectionid},#{measureid},'1',#{groupid})
+	</insert>
+	
+	<!-- 更新截面信息 -->
+	<update id="updateSection_cop" parameterType="section">
+		UPDATE section SET distance = #{distance},actualarea = #{actualarea},referarea=#{referarea},
+		exceedarea=#{exceedarea},owearea=#{owearea},refervolume=#{refervolume},exceedvolume=#{exceedvolume},owevolume=#{owevolume},
+		buildtime=#{buildtime},stage=#{stage},measuretime=#{measuretime},_sectionid=#{_sectionid}
+		WHERE _sectionid = #{_sectionid}
+	</update>
+	
+	<!-- 根据_sectionid查询section -->
+	<select id="findSectionBy_sectionid" parameterType="String" resultType="section">
+		SELECT * FROM section WHERE _sectionid=#{sectionid}
+	</select>
+	
+	<!-- 删除某个截面所有点 -->
+	<delete id="deletePoints" parameterType="String">
+		DELETE FROM POINT WHERE sectionid = #{sectionid}
+	</delete>
+	
+	<!-- 保存截面点信息 -->
+	<insert id="savePoint" parameterType="point">
+		INSERT INTO POINT(pointid,pointx,pointy,sectionid,scantime,OFFSET,TYPE,_pointid) VALUES(#{pointid},#{pointx},#{pointy},#{sectionid},#{scantime},#{offset},#{type},#{_pointid})
+	</insert>
+	
+	<!-- 查询是否存在某截面 -->
+	<select id="isExistSectionByDistanceAndStage" parameterType="section" resultType="section">
+		select * from section where distance=#{distance} AND stage=#{stage}
+	</select>
+	
+	<!-- 删除某个截面 -->
+	<delete id="deleteSection" parameterType="section">
+		DELETE FROM section WHERE sectionid = #{sectionid}
+	</delete>
+</mapper>

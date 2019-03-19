@@ -1,0 +1,166 @@
+
+.title-box{
+	width: 1000px;
+	height: 40px;
+	border-bottom: solid 2px #999;
+	padding-left: 10px;
+	
+	position:relative;
+	
+}
+
+.title-box a{
+}
+
+.title-box i{
+	width: 40px;
+	height:40px;
+	display: inline-block;
+	background: url(../../img/spirits.png) no-repeat;
+	background-size: 200px 200px;
+	background-position: -160px -80px;
+}
+
+.title-box span{
+	display: inline-block;
+	height: 40px;
+	width: 100px;
+	position: absolute;
+	top: 6px;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.right-main > .scroll_div{
+	width: 1000px;
+	height: 460px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.right-main > .scroll_div > p{
+	width: 990px;
+	height: 30px;
+	line-height: 30px;
+	margin-left: 10px;
+	margin-top: 20px;
+	padding-left: 10px;
+	border-left: solid 3px #0548FF;
+	
+	font-size: 16px;
+	font-weight: bold;
+	color:#666666;
+	background: #EEEEEE;
+}
+
+.baseinfo,.extendinfo{
+	padding: 10px;
+	padding-left: 30px;
+}
+
+.baseinfo > div:nth-of-type(1){
+	width: 200px;
+	height: 200px;
+}
+
+.baseinfo > div:nth-of-type(1) img{
+	width: 200px;
+	height: 200px;
+}
+.baseinfo > div:nth-of-type(2){
+	margin-left: 20px;
+	width: 720px;
+	height: 200px;
+}
+
+.baseinfo > div:nth-of-type(2) textarea{
+	width: 100%;
+	height: 160px;
+	outline: none;
+	resize: none;
+	padding: 5px;
+}
+.baseinfo > div:nth-of-type(2) ul{
+	width: 100%;
+	text-align: left;
+}
+.baseinfo > div:nth-of-type(2) ul li{
+	display: inline-block;
+	width: 100px;
+}
+
+.baseinfo > a{
+	display: inline-block;
+	width: 100%;
+	height: 40px;
+	margin-top: 10px;
+	color: #FFFFFF;
+	font-size: 16px;
+	
+	margin-right: 10px;
+	border-radius: 10px;
+	
+	text-align: center;
+	line-height: 40px;
+}
+
+
+.baseinfo > a:nth-of-type(1){
+	background: #999999;
+}
+
+
+.respinfo ul li{
+	width: 100%;
+	height: 120px;
+	margin-bottom: 5px;
+}
+.respinfo ul li textarea{
+	width: 100%;
+	height: 100px;
+	resize: none;
+	padding: 5px;
+	outline: none;
+}
+
+.respinfo ul li > div{
+	display: inline-block;
+}
+.respinfo ul li > div:nth-of-type(1){
+	width: 80px;
+	height: 120px;
+	line-height: 120px;
+	text-align: center;
+	font-size: 22px;
+	font-weight: bold;
+	
+	background: #CCCCCC;
+	color: #fff;
+}
+
+.respinfo ul li > div:nth-of-type(2){
+	width: 862px;
+	height: 120px;
+	
+}
+
+.collectinfo ul li{
+	width: 100%;
+	height: 30px;
+	margin-bottom: 5px;
+	line-height: 30px;
+}
+.collectinfo ul li > div:nth-of-type(1){
+	width: 60px;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	color: black;
+}
+
+.collectinfo ul li > div:nth-of-type(2){
+	width: 882px;
+	
+}

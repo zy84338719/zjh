@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zttx.mapper.WarningMapper">
+	<!-- 保存警报推送用户的关联信息 -->
+	<insert id="saveWarningUser" parameterType="WarningUser">
+		INSERT INTO warning_user(warningid,receiverid,state) VALUE(#{warningid},#{receiverid},#{state})
+	</insert>
+	
+	<!-- 保存警报信息 -->
+	<insert id="saveWarning" parameterType="Warning">
+		INSERT INTO warning(warningid,senderid,createtime,state,startdistance,enddistance,
+			type, theoryvolume, pouringvolume, pouringerror,tender,content)
+		VALUE(#{warningid},#{senderid},#{createtime},#{state},#{startdistance},#{enddistance},
+			#{type},#{theoryvolume},#{pouringvolume},#{pouringerror},#{tender},#{content})
+	</insert>
+
+	<!-- 更改用户消息操作状态 -->
+	<select id="queryWarningByUser" parameterType="User" resultType="WarningCustom">
+		SELECT
+		w.*,
+		(SELECT u.username from user u where u.userid=w.senderid) AS sender,
+		(SELECT u.username from user u where u.userid=wu.receiverid) AS receiver
+		from warning_user wu
+		LEFT JOIN warning w ON wu.warningid=w.warningid
+		WHERE wu.receiverid=#{userid} AND wu.state=0
+	</select>
+	
+	<!-- 根据warning参数查询warning信息 -->
+	<select id="findWarning" parameterType="Warning" resultType="WarningCustom">
+		SELECT
+		w.*,
+		t.tendername,
+		u.username AS sender
+		FROM warning w
+		LEFT JOIN tender t ON t.tenderid=w.tender
+		LEFT JOIN user u ON u.userid = w.senderid
+		WHERE warningid=#{warningid}
+	</select>
+	
+	<!-- 更改用户警报关联表的状态信息 -->
+	<update id="updateWarningUserState" parameterType="WarningUser">
+		UPDATE warning_user SET state=1 WHERE warningid=#{warningid} AND receiverid=#{receiverid}
+	</update>
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zttx.mapper.DistanceMapper" >
+	<!-- 根据里程段查询各班组的超欠挖信息 -->
+	<select id="queryGroupVolumeByDistance" parameterType="SectionQueryVo" resultType="DistanceGroupVolumeCustom">
+		SELECT
+		d.*,
+		g.groupname,
+		g.code,
+		t.tendername,
+		t.tenderid
+		FROM distance d
+		LEFT JOIN _group g ON d.groupid = g.groupid
+		LEFT JOIN tender t ON t.tenderid = d.tenderid 
+		
+		WHERE 1=1
+		<if test="start_distance != null and end_distance != null ">
+			AND begindistance &gt;= #{start_distance} AND enddistance &lt;= #{end_distance}
+			ORDER BY handle_state ASC, begindistance ASC
+		</if>
+	</select>
+	
+	<!-- 测量人员根据里程ID处理超欠挖  -->
+	<update id="handleOverOwe" parameterType="distanceQueryVo">
+		UPDATE distance SET handle_state=#{handle_state} WHERE distanceid=#{distanceid}
+	</update>
+	
+	<!-- 多条件查询各班组的超欠挖信息 -->
+	<select id="queryGroupByType" parameterType="DistanceQueryVo" resultType="DistanceGroupVolumeCustom">
+		SELECT d.*,
+		g.groupname
+		FROM distance d
+		LEFT JOIN _group g ON d.groupid = g.groupid
+		
+		WHERE 1=1
+		<if test="start_distance != null and end_distance != null ">
+			AND begindistance &gt;= #{start_distance} AND enddistance &lt;= #{end_distance}
+		</if>
+		<if test="begintime != null and begintime != '' ">
+			AND begintime &gt;= #{begintime}
+		</if>
+		<if test="endtime != null and endtime!= ''">
+			 AND (d.endtime IS NOT  NULL AND d.endtime &lt;= #{endtime})
+		</if>
+		<if test="handle_state != -1">
+			AND handle_state = #{handle_state}
+		</if>
+		<if test="groupid != null">
+			AND d.groupid = #{groupid}
+		</if>
+		<if test="groupname != null and groupname != ''">
+			<![CDATA[ AND g.groupname LIKE CONCAT('%',#{groupname},'%')]]>
+		</if>
+		ORDER BY begindistance ASC
+	</select>
+	
+	<!-- 下面都是数据对接部分方法 -->
+	<!-- 查询工程是否存在 -->
+	<select id="findDistance" parameterType="distance" resultType="distance">
+		select * from distance where _distanceid=#{_distanceid}
+	</select>
+	
+	<!-- 更新里程信息 -->
+	<update id="updateDistance" parameterType="distance">
+		update distance
+		set begindistance=#{begindistance},enddistance=#{enddistance},state=0,begintime=#{begintime},endtime=#{endtime},groupid=#{groupid},handle_state=0
+		where _distanceid=#{_distanceid}
+	</update>
+	
+	<!-- 保存里程信息 -->
+	<insert id="saveDistance" parameterType="distance">
+		INSERT INTO distance(distanceid,begindistance,enddistance,state,begintime,endtime,groupid,handle_state,_distanceid,tenderid,firstexceedvolume,firstowevolume,secondexceedvolume,secondowevolume,thirdexceedvolume,thirdowevolume,fourthexceedvolume,fourthowevolume)
+		VALUES (#{distanceid},#{begindistance},#{enddistance},0,#{begintime},#{endtime},#{groupid},0,#{_distanceid},'1',#{firstexceedvolume},#{firstowevolume},#{secondexceedvolume},#{secondowevolume},#{thirdexceedvolume},#{thirdowevolume},#{fourthexceedvolume},#{fourthowevolume})
+	</insert>
+	
+	<!-- 查询截面对应的工程是否存在 -->
+	<select id="findByDistance" parameterType="float" resultType="distance">
+		SELECT * FROM distance WHERE #{distance} &gt;= begindistance AND #{distance} &lt;= enddistance
+	</select>
+	
+	
+	<!-- 更新里程方量 -->
+	<insert id="updateDistanceVolume" parameterType="distance">
+		UPDATE distance set firstexceedvolume=#{firstexceedvolume},firstowevolume=#{firstowevolume},secondexceedvolume=#{secondexceedvolume},secondowevolume=#{secondowevolume},thirdexceedvolume=#{thirdexceedvolume},thirdowevolume=#{thirdowevolume},fourthexceedvolume=#{fourthexceedvolume},fourthowevolume=#{fourthowevolume}
+		WHERE distanceid = #{distanceid}
+	</insert>
+</mapper>

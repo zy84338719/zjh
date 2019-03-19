@@ -1,0 +1,83 @@
+/*重用样式*/
+*,
+::before,
+::after{
+	/*选择所有标签*/
+	margin: 0;
+	padding: 0;
+	
+	/*清除移动端默认的点击高亮的效果*/
+	-webkit-tap-highlight-color: transparent;
+	
+	/*设置box-sizing:是所有标签都意外边框开始计算宽度*/
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+body{
+	font-size: 14px;
+	/*字体为微软雅黑+设备默认字体*/
+	font-family: "微软雅黑",sans-serif;
+	color:#333;
+}
+
+a{
+	color:#048CFF;
+	text-decoration: none;
+}
+
+a:hover{
+	color:purple;
+}
+
+
+
+ul{
+	list-style: none;
+}
+
+select{
+	border: none;
+	outline: none;
+}
+
+/*公用样式*/
+.f_left{
+	float: left;
+}
+
+.f_right{
+	float: right;
+}
+
+.clearfix::before,
+.clearfix::after{
+    content: "";
+    height: 0;
+    line-height: 0;
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+[class^="icon_"]{
+	background: url(../img/sprites.png) no-repeat;
+	background-size:200px 200px ;/*精灵图压缩一倍*/
+}
+
+
+.m_l10{
+	margin-left: 10px;
+}
+
+.m_r10{
+	margin-right: 10px;
+}
+
+.m_t10{
+	margin-top: 10px;
+}
+
+.m_b10{
+	margin-bottom: 10px;
+}

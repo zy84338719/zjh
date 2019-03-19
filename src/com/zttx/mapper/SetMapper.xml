@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zttx.mapper.SetMapper" >
+	<!-- 用于按照不同条件查询单个用户 -->
+	<insert id="save" parameterType="Set">
+		INSERT INTO _set 
+		(setid, exceedval, exceedvolume, deceedvolume, exceedtime)
+		VALUES (#{setid}, #{exceedval}, #{exceedvolume}, #{deceedvolume}, #{exceedtime})
+	</insert>
+	
+	<!-- 查询全部设置信息 -->
+	<select id="find" resultType="Set">
+		SELECT * FROM _set
+	</select>
+	
+	<!-- 更新设置信息 -->
+	<update id="update" parameterType="Set">
+		UPDATE _set
+		SET exceedval=#{exceedval}, exceedvolume=#{exceedvolume},
+		deceedvolume=#{deceedvolume}, exceedtime=#{exceedtime}
+		WHERE setid=#{setid}
+	</update>
+</mapper>

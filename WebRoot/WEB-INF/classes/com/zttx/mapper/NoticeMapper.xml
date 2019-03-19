@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zttx.mapper.NoticeMapper">
+
+	<insert id="saveNoticeUser" parameterType="NoticeUser">
+		INSERT INTO notice_user(msgid,receiverid,state) VALUE(#{msgid},#{receiverid},#{state})
+	</insert>
+	
+	<insert id="saveNotice" parameterType="NoticeQueryVo">
+		INSERT INTO notice(msgid,senderid,createtime,state,distanceid,content,TYPE, module_type)
+			VALUE(#{msgid},#{senderid},#{createtime},#{state},#{distanceid},#{content},#{type},#{module_type})
+	</insert>
+	
+	<!-- 查询登录用户的全部未处理信息 -->
+	<select id="queryMessageListByUserId" parameterType="NoticeQueryVo" resultType="Notice">
+		SELECT
+		n.msgid,
+		n.state,
+		n.distanceid,
+		n.content,
+		n.type,
+		n.createtime,
+		n.senderid,
+		n.module_type,
+		nu.receiverid
+		
+		FROM notice n
+		LEFT JOIN notice_user nu ON n.msgid = nu.msgid
+		WHERE module_type=#{module_type} AND nu.receiverid=#{userid} AND nu.state=0
+		ORDER BY n.createtime DESC
+	</select>
+	
+	<!-- 根据消息ID查询消息详情 -->
+	<select id="queryDetail" parameterType="Notice" resultType="NoticeCustom">
+		SELECT
+		n.*,
+		u.username sender
+		FROM notice n 
+		LEFT JOIN user u ON n.senderid=u.userid
+		WHERE n.msgid=#{msgid}
+	</select>
+	
+	<!-- 查询登录用户各功能模块的全部未处理信息数量 -->
+	<select id="queryMessageCount" parameterType="NoticeQueryVo" resultType="NoticeNumberCustom">
+		SELECT
+		(SELECT count(*) FROM notice_user nn WHERE nn.receiverid=nu.receiverid AND n.module_type=1 AND nn.state=0) AS threeD_number,
+		(SELECT count(*) FROM notice_user nn WHERE nn.receiverid=nu.receiverid AND n.module_type=2 AND nn.state=0) AS quality_number,
+		(SELECT count(*) FROM notice_user nn WHERE nn.receiverid=nu.receiverid AND n.module_type=3 AND nn.state=0) AS task_number
+		FROM notice n
+		LEFT JOIN notice_user nu ON n.msgid = nu.msgid
+		WHERE nu.receiverid=#{userid}
+		GROUP BY nu.receiverid
+	</select>
+	
+	<!-- 更改用户消息操作状态 -->
+	<update id="updateNoticeUserState" parameterType="NoticeQueryVo">
+		UPDATE notice_user nu SET nu.state=#{state}
+		WHERE nu.msgid=#{msgid} AND nu.receiverid=#{receiverid}
+	</update>
+</mapper>

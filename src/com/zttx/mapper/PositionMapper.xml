@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zttx.mapper.PositionMapper">
+	
+	<select id="findAllEmployee" parameterType="Employee" resultType="Employee">
+		SELECT * FROM employee WHERE lasttime LIKE '${lasttime}%' ORDER BY empid ASC
+	</select>
+	
+	<select id="findRFIDNum" resultType="int">
+		SELECT MAX(brushmach) FROM brushcard 
+	</select>
+	
+	<select id="findEmpRFID" parameterType="String" resultType="int">
+		SELECT brushcard.brushmach FROM brushcard WHERE brushcard.cardno=#{cardno} ORDER BY brushcard.brushdate DESC,brushcard.brushtime DESC LIMIT 0,1
+	</select>
+	
+</mapper>

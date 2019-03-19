@@ -1,0 +1,128 @@
+
+.title-box{
+	width: 1000px;
+	height: 40px;
+	border-bottom: solid 2px #999;
+	padding-left: 10px;
+	
+	position:relative;
+	
+}
+
+.title-box a{
+}
+
+.title-box i{
+	width: 40px;
+	height:40px;
+	display: inline-block;
+	background: url(../../img/spirits.png) no-repeat;
+	background-size: 200px 200px;
+	background-position: -160px -80px;
+}
+
+.title-box span{
+	display: inline-block;
+	height: 40px;
+	width: 100px;
+	position: absolute;
+	top: 6px;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.right-main > .scroll_div{
+	width: 1000px;
+	height: 460px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.right-main > .scroll_div > p{
+	width: 990px;
+	height: 30px;
+	line-height: 30px;
+	margin-left: 10px;
+	margin-top: 20px;
+	padding-left: 10px;
+	border-left: solid 3px #0548FF;
+	
+	font-size: 16px;
+	font-weight: bold;
+	color:#666666;
+	background: #EEEEEE;
+}
+
+.baseinfo,.idinfo{
+	padding: 10px;
+	padding-left: 30px;
+}
+
+.baseinfo > div:nth-of-type(1){
+	width: 70px;
+	text-align: center;
+}
+
+.baseinfo > div:nth-of-type(1) > img{
+	width: 65px;
+	height: 65px;
+	vertical-align: middle;
+	border-radius: 50%;
+}
+.baseinfo > div:nth-of-type(1) > p{
+	color: #0548FF;
+}
+.baseinfo > div:nth-of-type(2),.baseinfo > div:nth-of-type(3){
+	width: 250px;
+	height: 65px;
+	vertical-align: middle;
+	margin-left: 20px;
+}
+
+.baseinfo > div:nth-of-type(2) > p,.baseinfo > div:nth-of-type(3) > p{
+	margin-top: 10px;
+}
+.baseinfo > div:nth-of-type(4){
+	width: 65px;
+	height: 65px;
+	padding-top: 20px;
+}
+.baseinfo > div:nth-of-type(4) > span{
+	display: block;
+	width: 60px;
+	height: 60px;
+	line-height: 50px;
+	text-align: center;
+	color: #FF7C00;
+	font-size: 26px;
+	font-weight: bold;
+	border: solid 5px #FF7C00;
+	border-radius: 50%;
+}
+
+
+.idinfo ul{
+	width: 950px;
+}
+
+.idinfo ul li{
+	display: inline-block;
+	width: 48%;
+	margin-top: 10px;
+}
+
+.idinfo ul li img{
+	vertical-align: top;
+	width: 300px;
+	height: 150px;
+}
+
+.idinfo ul li textarea{
+	vertical-align: top;
+	width: 200%;
+	height: 100px;
+	resize: none;
+	padding: 8px;
+}

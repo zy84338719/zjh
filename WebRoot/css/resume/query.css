@@ -1,0 +1,116 @@
+.search-box{
+	width: 100%;
+	height: 40px;
+	line-height: 40px;
+	font-size: 15px;
+	padding-left: 20px;
+	padding-right: 20px;
+	border-bottom: solid 2px #999;
+}
+
+.search-box span{
+	margin-right: 10px;
+}
+
+.search-box span input{
+	margin-right: 2px;
+}
+
+
+.search-box p input{
+	width: 200px;
+	height: 26px;
+	line-height: 26px;
+	border-radius: 14px;
+	outline: none;
+	border: solid 1px #ccc;
+	
+	padding-left: 15px;
+}
+
+
+.search-box p a{
+	display: inline-block;
+	margin-left: 4px;
+	color: darkblue;
+}
+
+.search-box p a:hover{
+	color: purple;
+}
+.search-box p a:nth-of-type(2){
+	color: #666;
+	margin-left: 10px;
+}
+
+
+/*S=列表内容区*/
+.right-main{
+	position: relative;
+}
+
+.right-main .list ul{
+	width: 100%;
+}
+
+.right-main .list ul li{
+	width: 100%;
+	height: 70px;
+	line-height: 70px;
+	
+	text-align: center;
+	
+}
+
+.right-main .list ul li:nth-of-type(1){
+	height: 40px;
+	line-height: 40px;
+	background: #EAEAEA;
+}
+
+.right-main .list ul li span{
+	display: inline-block;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	
+	padding-left: 5px;
+	padding-right: 5px;
+	
+	border-right: solid 2px #fff;
+}
+
+.right-main .list ul li span:nth-of-type(1){
+	border-left: solid 2px #fff;
+}
+.right-main .list ul li span:nth-of-type(1){
+	width: 100px;
+}
+.right-main .list ul li span:nth-of-type(2){
+	width: 150px;
+}
+.right-main .list ul li span:nth-of-type(3){
+	width: 150px;
+}
+.right-main .list ul li span:nth-of-type(4){
+	width: 80px;
+}
+.right-main .list ul li span:nth-of-type(4) img{
+	width: 60px;
+	height: 60px;
+	vertical-align: middle;
+}
+
+.right-main .list ul li span:nth-of-type(5){
+	width: 120px;
+}
+.right-main .list ul li span:nth-of-type(6){
+	width: 120px;
+}
+.right-main .list ul li span:nth-of-type(7){
+	width: 100px;
+}
+.right-main .list ul li span:nth-of-type(8){
+	width: 160px;
+}
+/*E=列表内容区*/

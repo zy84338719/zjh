@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zttx.mapper4.AuthorityMapper4" >
+	<!-- 查询用户权限信息 -->
+	<select id="queryUserAuthority" parameterType="AuthorityCustom" resultType="UserAuthority">
+		SELECT * FROM user_authority WHERE userid=#{userid}
+	</select>
+	
+	<!-- 根据topid查询对应权限信息 -->
+	<select id="findTopAuthorityByTopId" parameterType="String" resultType="TopAuthority">
+		SELECT * FROM topauthority WHERE topid=#{topid}
+	</select>
+	
+	<!-- 根据secondid查询对应二级权限信息 -->
+	<select id="findSecondAuthorityBySecondId" parameterType="String" resultType="SecondAuthority">
+		SELECT * FROM secondauthority WHERE secondid=#{secondid}
+	</select>
+</mapper>

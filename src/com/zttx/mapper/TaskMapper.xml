@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zttx.mapper.TaskMapper" >
+	
+	<!-- 保存用户任务信息 -->
+	<insert id="saveTaskUser" parameterType="TaskUser">
+		INSERT INTO task_user (taskid, userid, state,score)
+		VALUES (#{taskid}, #{userid}, #{state},#{score})
+	</insert>
+	
+	<!-- 保存任务信息 -->
+	<insert id="saveTask" parameterType="Task">
+		INSERT INTO task (taskid, createrid, title, content, createtime, deadline, note,
+			starttime,imgurl1,imgurl2,imgurl3,imgurl4,imgurl5,level)
+		VALUES (#{taskid}, #{createrid}, #{title}, #{content}, #{createtime},#{deadline}, 
+			 #{note}, #{starttime},#{imgurl1},#{imgurl2},#{imgurl3},#{imgurl4},#{imgurl5},#{level})
+	</insert>
+	
+	<!-- 查询登录用户发布的任务信息 -->
+	<!-- <select id="queryTaskList" parameterType="User" resultType="TaskCustom">
+		SELECT
+		t.taskid,
+		t.title,
+		t.content,
+		t.createtime,
+		t.deadline,
+		t.imgurl1,
+		t.imgurl2,
+		t.imgurl3,
+		t.imgurl4,
+		t.imgurl5,
+		t.level,
+		t.note,
+		t.createrid,
+		(SELECT username FROM user WHERE userid=t.createrid) AS sender,
+		(SELECT username FROM user WHERE userid=tu.userid) AS receiver,
+		tu.state
+		FROM task t
+		LEFT JOIN task_user tu ON t.taskid=tu.taskid
+		WHERE t.createrid=#{userid}
+		ORDER BY t.createtime DESC, t.starttime DESC, t.deadline DESC
+	</select> -->
+	
+	<!-- 查询登录用户发布的任务信息 -->
+	<select id="queryTaskList" parameterType="User" resultType="TaskCustom">
+		SELECT
+		t.taskid,
+		t.title,
+		t.content,
+		t.createtime,
+		t.starttime,
+		t.deadline,
+		t.imgurl1,
+		t.imgurl2,
+		t.imgurl3,
+		t.imgurl4,
+		t.imgurl5,
+		t.level,
+		t.note,
+		t.createrid,
+		(SELECT username FROM user WHERE userid=t.createrid) AS sender
+		FROM task t
+		WHERE t.createrid=#{userid}
+		ORDER BY t.createtime DESC, t.starttime DESC, t.deadline DESC
+	</select>
+	
+	<!-- 查询登录用户接收的任务信息 -->
+	<select id="queryTaskUserList" parameterType="User" resultType="TaskUserCustom">
+		SELECT
+		tu.taskid,
+		tu.userid,
+		(SELECT username FROM user WHERE userid=tu.userid) AS receiver,
+		tu.state,
+		tu.dealtime,
+		tu.dealresult,
+		t.title,
+		t.imgurl1,
+		t.imgurl2,
+		t.imgurl3,
+		t.imgurl4,
+		t.imgurl5,
+		t.level,
+		t.createtime,
+		t.starttime,
+		(SELECT username FROM user WHERE userid=t.createrid) AS sender,
+		t.content,
+		t.deadline
+		FROM task_user tu
+		LEFT JOIN task t ON t.taskid=tu.taskid
+		WHERE tu.userid=#{userid}
+		ORDER BY t.createtime DESC, t.starttime DESC, t.deadline DESC
+	</select>
+	
+	<!-- 查看任务详情 -->
+	<!-- <select id="findTaskDetail" parameterType="Task" resultType="TaskCustom">
+		SELECT
+		t.taskid,
+		t.title,
+		t.content,
+		t.createtime,
+		t.deadline,
+		t.note,
+		t.imgurl,
+		t.createrid,
+		(SELECT username FROM user WHERE userid=t.createrid) AS sender,
+		(SELECT username FROM user WHERE userid=tu.userid) AS receiver,
+		tu.state,
+		tu.dealtime,
+		tu.dealresult
+		FROM task t
+		LEFT JOIN task_user tu ON tu.taskid=t.taskid
+		WHERE t.taskid=#{taskid}
+	</select> -->
+	
+	<!-- 查看任务详情 -->
+	<select id="findTaskDetail" parameterType="Task" resultType="TaskCustom">
+		SELECT
+		t.taskid,
+		t.title,
+		t.content,
+		t.createtime,
+		t.starttime,
+		t.deadline,
+		t.note,
+		t.imgurl1,
+		t.imgurl2,
+		t.imgurl3,
+		t.imgurl4,
+		t.imgurl5,
+		t.level,
+		t.createrid,
+		(SELECT username FROM user WHERE userid=t.createrid) AS sender
+		FROM task t
+		WHERE t.taskid=#{taskid}
+	</select>
+	
+	<!-- 根据任务ID查询相应人员信息 -->
+	<select id="findTaskDetailUser" parameterType="Task" resultType="User">
+		SELECT
+		u.username,
+		u.userid,
+		tu.state,
+		tu.dealresult
+		FROM user u 
+		LEFT JOIN task_user tu ON u.userid=tu.userid
+		WHERE tu.taskid=#{taskid}
+	</select>
+	
+	<!-- 用户任务反馈 -->
+	<update id="dealTask" parameterType="TaskUser">
+		UPDATE task_user SET dealresult = #{dealresult},state=#{state},dealtime=#{dealtime} where userid = #{userid} and taskid = #{taskid}
+	</update>
+	
+	<!-- 根据taskid查询任务用户关联表中完成状态为1“已完成”的记录 -->
+	<select id="queryTaskUserByState" parameterType="Task" resultType="TaskUser">
+		SELECT * FROM task_user WHERE taskid=#{taskid} AND state=1
+	</select>
+	
+	<!-- 根据taskID删除任务表与关联表数据 -->
+	<delete id="deleteTask" parameterType="Task">
+		DELETE FROM task WHERE taskid=#{taskid}
+	</delete>
+	
+	<!-- 根据taskID删除任务表与关联表数据 -->
+	<delete id="deleteTaskUser" parameterType="Task">
+		DELETE FROM task_user WHERE taskid=#{taskid}
+	</delete>
+	
+	<!-- 更新task信息 -->
+	<update id="modify" parameterType="Task">
+		UPDATE task SET
+			createtime=#{createtime}
+		<if test="title != null and title != ''">
+			,title=#{title}
+		</if>
+		<if test="content != null and content != ''">
+			,content=#{content}
+		</if>
+		<if test="deadline != null and deadline != ''">
+			,deadline=#{deadline}
+		</if>
+		<if test="starttime != null and starttime != ''">
+			,starttime=#{starttime}
+		</if>
+		<if test="imgurl1 != null and imgurl1 != ''">
+			,imgurl1=#{imgurl1}
+		</if>
+		<if test="imgurl2 != null and imgurl2 != ''">
+			,imgurl2=#{imgurl2}
+		</if>
+		<if test="imgurl3 != null and imgurl3 != ''">
+			,imgur3=#{imgurl3}
+		</if>
+		<if test="imgurl4 != null and imgurl4 != ''">
+			,imgur4=#{imgurl4}
+		</if>
+		<if test="imgurl5 != null and imgurl5 != ''">
+			,imgur5=#{imgurl5}
+		</if>
+		<if test="level != null and level != ''">
+			,level=#{level}
+		</if>
+		WHERE taskid=#{taskid}
+	</update>
+	
+	<!-- 根据TaskID查询任务接收人员ID -->
+	<select id="queryTaskUserByTaskId" parameterType="String" resultType="TaskUserCustom">
+		SELECT
+		tu.taskid,
+		tu.userid,
+		(SELECT username FROM user WHERE userid=tu.userid) AS receiver,
+		tu.state,
+		tu.dealtime,
+		tu.dealresult,
+		(SELECT username FROM user WHERE userid=t.createrid) AS sender
+		FROM task_user tu
+		LEFT JOIN task t ON t.taskid=tu.taskid
+		WHERE tu.taskid=#{taskid}
+	</select>
+	
+	<!-- 查询全部任务列表 -->
+	<select id="queryAllTask" resultType="TaskCustom">
+		SELECT
+		t.taskid,
+		t.title,
+		t.content,
+		t.createtime,
+		t.starttime,
+		t.deadline,
+		t.imgurl1,
+		t.imgurl2,
+		t.imgurl3,
+		t.imgurl4,
+		t.imgurl5,
+		t.level,
+		t.note,
+		t.createrid,
+		(SELECT username FROM user WHERE userid=t.createrid) AS sender
+		FROM task t
+		ORDER BY t.createtime DESC, t.starttime DESC, t.deadline DESC
+	</select>
+	
+	<!-- 根据任务标题模糊查询任务列表 -->
+	<select id="queryTaskByTitle" parameterType="TaskQueryVo" resultType="TaskCustom">
+		SELECT
+		t.taskid,
+		t.title,
+		t.content,
+		t.createtime,
+		t.starttime,
+		t.deadline,
+		t.imgurl1,
+		t.imgurl2,
+		t.imgurl3,
+		t.imgurl4,
+		t.imgurl5,
+		t.level,
+		t.note,
+		t.createrid,
+		(SELECT username FROM user WHERE userid=t.createrid) AS sender
+		FROM task t
+		WHERE 1=1
+		<if test="title != null and title != '' ">
+			AND t.title LIKE CONCAT('%',#{title},'%')
+		</if>
+		<if test="time1 != null and time1 != '' ">
+			AND t.createtime &gt;= #{time1}
+		</if>
+		
+		<if test="time2 != null and time2 != '' ">
+			AND t.createtime &lt; #{time2}
+		</if>
+		
+		<if test="creater != null and creater != '' ">
+			AND t.createrid IN (SELECT userid from user where username LIKE CONCAT('%',#{creater},'%'))
+		</if>
+		ORDER BY t.createtime DESC, t.starttime DESC, t.deadline DESC
+	</select>
+	
+	<!-- 查询某个任务未完成人数 -->
+	<select id="queryUnFinishedCount" parameterType="taskCustom" resultType="int">
+		SELECT COUNT(*)
+			FROM task_user
+			WHERE task_user.taskid = #{taskid} AND state != 1
+	</select>
+	
+	<!-- 查询所有未完成的清单 -->
+	<select id="queryAllUnfinishedTasks" resultType="TaskCustom">
+		SELECT tu.* ,t.* ,u.username sender FROM task t,task_user tu, USER u WHERE t.taskid = tu.taskid AND t.createrid=u.userid GROUP BY tu.taskid HAVING tu.state!=1 
+	</select>
+	
+	<!-- 审核任务通过 -->
+	<update id="verifyTask" parameterType="taskUser">
+		update task_user set state = 1 where userid=#{userid} and taskid=#{taskid}
+	</update>
+	
+	<!-- 查询部门清单列表 -->
+	<select id="queryTaskListByGroupid" parameterType="String" resultType="TaskCustom">
+		 SELECT t.*,u.username sender FROM task t,USER u WHERE t.createrid=u.userid AND u.groupid=#{groupid}
+	</select>
+</mapper>

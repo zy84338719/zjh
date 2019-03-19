@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zttx.mapper.UserMapper" >
+	<!-- 用于按照不同条件查询单个用户 -->
+	<select id="findUser" parameterType="user" resultType="userCustom">
+		SELECT
+		u.*,
+		g.groupname
+		FROM USER u
+		LEFT JOIN _group g ON u.groupid=g.groupid
+		<where>
+			<if test="loginname != null and loginname != ''">
+				AND u.loginname = #{loginname}
+			</if>
+			
+			<if test="telphone != null and telphone != ''">
+				AND u.telphone = #{telphone}
+			</if>
+			
+			<if test="password != null and password != ''">
+				AND u.password = #{password}
+			</if>
+			
+			<if test="userid != null and userid != ''">
+				AND u.userid = #{userid}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findLeader" resultType="UserCustom">
+		SELECT * FROM USER WHERE role='领导';
+	</select>
+	
+	<!--  -->
+	<select id="findUserByGroupid" parameterType="String" resultType="User">
+		SELECT 
+		u.*
+		(SELECT SUM(t.score) FROM task_user t WHERE t.userid=u.userid AND t.state=1) AS score,
+		(SELECT SUM(t.score) FROM task_user t WHERE t.userid=u.userid) AS totalscore
+		FROM USER u
+		WHERE u.groupid=#{groupid}		
+	</select>
+	
+	<!-- 更新用户信息 -->
+	<update id="updateUser" parameterType="UserCustom">
+		UPDATE USER SET loginname=#{loginname}, username=#{username}, telphone=#{telphone}
+			WHERE userid=#{userid}
+	</update>
+	
+	<!-- 条件查询用户 -->
+	<select id="findUserByType" parameterType="TaskQueryVo" resultType="UserCustom">
+		SELECT
+		g.groupname,
+		u.*
+		FROM user u
+		LEFT JOIN _group g ON g.groupid=u.groupid
+		WHERE 1=1
+		<if test="groupname != null and groupname != ''">
+			<![CDATA[ AND g.groupname LIKE CONCAT('%',#{groupname},'%')]]>
+		</if>
+		<if test="username != null and username != ''">
+			<![CDATA[ AND u.username LIKE CONCAT('%',#{username},'%')]]>
+		</if>
+		ORDER BY g.code ASC 
+	</select>
+	
+	<!-- 根据角色查询用户 -->
+	<select id="findUserByRole" parameterType="UserQueryVo" resultType="User">
+		SELECT
+		g.groupname,
+		u.*
+		FROM user u
+		LEFT JOIN _group g ON g.groupid=u.groupid
+		WHERE 1=1
+		<if test="role != null and role != ''">
+			<![CDATA[ AND u.role =#{role}]]>
+		</if>
+		ORDER BY g.code ASC 
+	</select>
+	
+	<!-- 根据班组查询用户 -->
+	<select id="findUserByGroup" parameterType="UserQueryVo" resultType="User">
+		SELECT 
+		u.*,
+		(SELECT SUM(t.score) FROM task_user t WHERE t.userid=u.userid AND t.state=1) AS score,
+		(SELECT SUM(t.score) FROM task_user t WHERE t.userid=u.userid) AS totalscore
+		FROM user u 
+		LEFT JOIN _group g ON g.groupid=u.groupid
+		WHERE 1=1
+		<if test="groupname != null and groupname != ''">
+			<![CDATA[ AND g.groupname LIKE CONCAT('%',#{groupname},'%')]]>
+		</if>
+	</select>
+	
+	<!-- 按条件查询得分 -->
+	<select id="findUserScore" parameterType="userQueryVo" resultType="User">
+		SELECT 
+		u.*,
+		(SELECT SUM(t.score) FROM task_user t,task ta WHERE t.userid=u.userid AND t.state=1 AND t.taskid = ta.taskid
+		<if test="time1 != null and time1 != ''">
+			AND ta.createtime &gt;=#{time1}
+		</if>
+		<if test="time2 != null and time2 != ''">
+			AND ta.createtime &lt;=#{time2}
+		</if>
+		) AS score,
+		(SELECT SUM(t.score) FROM task_user t,task ta WHERE t.userid=u.userid AND t.taskid = ta.taskid
+		<if test="time1 != null and time1 != ''">
+			AND ta.createtime &gt;=#{time1}
+		</if>
+		<if test="time2 != null and time2 != ''">
+			AND ta.createtime &lt;=#{time2}
+		</if>
+		) AS totalscore
+		FROM USER u
+		WHERE u.groupid=#{groupid}		
+	</select>
+	
+	<!-- 下面几个都是数据对接方法 -->
+	<!-- 根据_userid查询用户 -->
+	<select id="findBy_userid" parameterType="String" resultType="user">
+		select * from user where _userid = #{_userid}
+	</select>
+	
+	<!-- 根据_userid同步更新用户信息 -->
+	<update id="updateUser_cop" parameterType="user">
+		UPDATE user SET loginname=#{loginname}, username=#{username}, telphone=#{telphone},password=#{password},groupid=#{groupid}
+			WHERE _userid=#{_userid}
+	</update>
+	
+	<!-- 根据插入用户信息 -->
+	<insert id="saveUser_cop" parameterType="user">
+		insert into user(userid,loginname,username,telphone,password,groupid,_userid)
+		values(#{userid},#{loginname},#{username},#{telphone},#{password},#{groupid},#{_userid})
+	</insert>
+	
+	<!-- 查询对应用户权限 -->
+	<select id="findUserAuthority" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM user_authority WHERE userid = #{userid}
+	</select>
+	
+	<!-- 根据_userid同步更权限信息 -->
+	<update id="updatePermission" parameterType="userAuthority">
+		UPDATE user_authority SET topauthority=#{topauthority}, secondauthority=#{secondauthority}
+			WHERE userid=#{userid}
+	</update>
+	
+	<!-- 根据插入用户信息 -->
+	<insert id="savePermission" parameterType="userAuthority">
+		insert into user_authority(userid,topauthority,secondauthority)
+		values(#{userid},#{topauthority},#{secondauthority})
+	</insert>
+	
+	<!-- 删除质量溯源模块的二级用户权限关联表 -->
+	<delete id="deleteQualityAuthority" parameterType="UserAuthority">
+		DELETE FROM qualityauthority WHERE s_userid=#{userid}
+	</delete>
+	
+	<!-- 插入质量溯源二级用户权限关联表 -->
+	<insert id="insertIntoQualityAuthority" parameterType="QualityAuthority">
+		INSERT INTO qualityauthority(s_functionname, s_iconurl, s_topid, s_functionurl, s_userid)
+			values(#{s_functionname},#{s_iconurl},#{s_topid},#{s_functionurl},#{s_userid})
+	</insert>
+	
+	<!-- 根据所属班组查询用户信息 -->
+	<select id="findUserOnlyNameAndIdByGroupid" parameterType="String" resultType="User">
+		SELECT 
+		u.username,
+		u.userid,
+		u.role
+		FROM USER u
+		WHERE u.groupid=#{groupid}		
+	</select>
+	
+	<!-- 更新用户角色 -->
+	<update id="updateRole" parameterType="user">
+		update user set role = #{role} where userid=#{userid}
+	</update>
+	
+	
+</mapper>

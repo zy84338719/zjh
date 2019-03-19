@@ -1,0 +1,168 @@
+body{
+	background: #E2E6E8;
+	/*overflow: hidden;*/
+}
+
+/*S=顶部信息*/
+.top{
+	width: 1200px;
+	height: 80px;
+	background: white;
+	padding: 6px;
+	
+	margin: 0px auto;
+}
+
+.top .nav{
+	width: 100%;
+	text-align: right;
+}
+
+.top ul li{
+	float: right;
+	margin-right: 8px;
+}
+
+.top ul li a:hover{
+	color:purple;
+}
+
+.top h1{
+	margin-top: -10px;
+}
+
+.top h1 span{
+	font-size: 40px;
+	margin-left: 30px;
+	margin-right: 10px;
+}
+/*E=顶部信息*/
+
+/*S=顶部导航栏*/
+.top_nav{
+	width: 1200px;
+	height: 30px;
+	background: white;
+	
+	margin: 0px auto;
+	
+	
+}
+
+.top_nav ul{
+	width: 100%;
+	height: 30px;
+	background: #495B69;
+	
+}
+/*E=顶部导航栏*/
+
+/*S=当前位置*/
+.location{
+	width: 100%;
+	height: 30px;
+	line-height: 30px;
+	
+	margin: 0px auto;
+	margin-top:10px;
+	border-bottom: solid 1px #ccc;
+	background: #fff;
+	
+	width: 1200px;
+	
+}
+/*E=当前位置*/
+
+.main-content{
+	width: 1200px;
+	height: 520px;
+	background: white;
+	margin: 0px auto;
+}
+
+/*S=左侧导航栏*/
+.left-nav{
+	width: 180px;
+	height: 520px;
+	background: red;
+	float: left;
+	background: #2B3946;
+}
+
+
+/*E=左侧导航栏*/
+
+/*S=右侧主内容*/
+.right-main{
+	width: 1020px;
+	height: 520px;
+	float: right;
+	color: #fff;
+}
+.right-main .login-box{
+	width: 360px;
+	height: 280px;
+	background: #2B3946;
+	margin: 80px auto;
+	
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+}
+
+.login-box .title{
+	width: 100%;
+	height: 70px;
+	line-height: 70px;
+	text-align: center;
+	font-size: 22px;
+	font-weight: bold;
+	border-bottom: solid 1px #171F24;
+	margin-bottom: 20px;
+}
+
+.login-box p{
+	width: 100%;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	
+	font-size: 16px;
+	
+	transition-duration: 0.3s;
+	
+}
+
+.login-box p input{
+	width: 140px;
+	height: 24px;
+	margin-left: 10px;
+	background: #EEE;
+}
+
+.login-box a{
+	display: block;
+	width: 220px;
+	height: 34px;
+	line-height: 34px;
+	text-align: center;
+	margin:20px auto;
+	border: solid 1px #fff;
+	color: #fff;
+	
+	transition-duration: 0.3s;
+}
+
+.login-box a:hover{
+	border: solid 1px #fff;
+	background: #fff;
+	color: #2B3946;
+	
+	transition-duration: 0.3s;
+}
+
+.login-box .error{
+	text-align: center;
+	font-size: 16px;
+	color:red;
+}
+/*E=右侧主内容*/

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zttx.mapper4.GroupMapper4" >
+	<!-- 根据ID查询群组信息 -->
+	<select id="findGroupById" parameterType="String" resultType="Group">
+		SELECT * FROM _group WHERE groupid=#{groupid}
+	</select>
+	
+	<!-- 查询全部班组信息 -->
+	<select id="queryAllGroup" resultType="GroupCustom">
+		SELECT 
+		g.groupid,
+		g.groupname,
+		g.code 
+		FROM _group g 
+		ORDER BY g.code ASC
+	</select>
+	
+	<!-- 根据Code查询群组信息 -->
+	<select id="findGroupByCode" parameterType="String" resultType="Group">
+		SELECT 
+		g.groupid,
+		g.groupname 
+		FROM _group g 
+		WHERE g.code=#{code}
+	</select>
+	
+	<!-- 下面几个都是数据对接方法 -->
+	<!-- 根据_groupid查询班组信息是否存在 -->
+	<select id="findBy_groupid" parameterType="String" resultType="group">
+		SELECT * FROM _group WHERE _groupid=#{_groupid}
+	</select>
+	
+	<!-- 根据_groupid更新班组信息 -->
+	<update id="updateGroup_cop" parameterType="group">
+		update _group set groupname=#{groupname},code = #{code} where _groupid=#{_groupid}
+	</update>
+	
+	<!-- 保存班组信息 -->
+	<insert id="saveGroup_cop" parameterType="group">
+		insert into _group(groupid,groupname,code,_groupid) values(#{groupid},#{groupname},#{code},#{_groupid})
+	</insert>
+	
+	<!-- 获取全部分组信息 -->
+	<select id="queryAllGroupOnlyNameAndId" resultType="GroupCustom">
+		SELECT 
+		g.groupid,
+		g.groupname,
+		g.code
+		FROM _group g
+	</select>
+	
+	<!-- 根据Code查询群组信息 -->
+	<select id="findGroupByCodeOnlyName" parameterType="String" resultType="Group">
+		SELECT g.groupname FROM _group g WHERE g.code=#{code}
+	</select>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zttx.mapper.UrgeMapper" >
+	<select id="queryMyReceived" parameterType="user" resultType="urgeCustom">
+		SELECT urge.*,a.username sendername
+			FROM urge,USER a
+			WHERE urge.sender=a.userid AND urge.receiver = #{userid}
+			ORDER BY updatetime DESC
+	</select>
+	
+	<delete id="deleteUrge" parameterType="urge">
+		DELETE FROM urge WHERE urgeid = #{urgeid}
+	</delete>
+	
+	<select id="getCount" parameterType="urge" resultType="int">
+		SELECT COUNT(*) FROM urge WHERE receiver = #{receiver} AND taskid = #{taskid}
+	</select>
+	
+	<insert id="save" parameterType="urge">
+		INSERT INTO urge(sender,receiver,taskid,updatetime) VALUES(#{sender},#{receiver},#{taskid},#{updatetime});
+	</insert>
+</mapper>

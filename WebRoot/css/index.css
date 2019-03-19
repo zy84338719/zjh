@@ -1,0 +1,228 @@
+body{
+	background: #E2E6E8;
+	overflow: hidden;
+}
+
+/*S=顶部信息*/
+.top{
+	width: 1200px;
+	height: 80px;
+	background: white;
+	padding: 6px;
+	
+	margin: 0px auto;
+}
+
+.top .nav{
+	width: 100%;
+	text-align: right;
+}
+
+.top ul li{
+	float: right;
+	margin-right: 8px;
+}
+
+.top ul li a:hover{
+	color:purple;
+}
+
+.top h1{
+	margin-top: -10px;
+}
+
+.top h1 span{
+	font-size: 40px;
+	margin-left: 30px;
+	margin-right: 10px;
+}
+/*E=顶部信息*/
+
+/*S=顶部导航栏*/
+.top_nav{
+	width: 1200px;
+	height: 30px;
+	background: white;
+	
+	margin: 0px auto;
+	
+	
+}
+
+.top_nav ul{
+	width: 100%;
+	background: #495B69;
+	
+}
+
+.top_nav ul li{
+	float: left;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-right: solid 2px #fff;
+	background: #495B69;
+	transition-delay: 0.3s;
+}
+
+.top_nav ul li a{
+	color: #fff;
+}
+
+.top_nav ul li a i{
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	vertical-align: middle;
+	margin-right: 4px;
+	
+	background: url(../img/spirits.png) no-repeat;
+	background-size:100px 100px ;/*精灵图压缩一倍*/
+}
+.top_nav ul li:hover{
+	background: #1C242C;
+	
+	transition-delay: 0.3s;
+}
+.top_nav ul li:nth-of-type(1) a i{
+	background-position: -0px -20px;
+}
+.top_nav ul li:nth-of-type(2) a i{
+	background-position: -0px 0;
+}
+.top_nav ul li:nth-of-type(3) a i{
+	background-position: -20px 0;
+}
+.top_nav ul li:nth-of-type(4) a i{
+	background-position: -40px 0;
+}
+.top_nav ul li:nth-of-type(5) a i{
+	background-position: -80px -20px;
+}
+.top_nav ul li:nth-of-type(6) a i{
+	background-position: -60px 0;
+}
+.top_nav ul li:nth-of-type(7) a i{
+	background-position: -80px 0;
+}
+.top_nav ul li:nth-of-type(8) a i{
+	background-position: -40px -20px;
+}
+.top_nav ul li:nth-of-type(9) a i{
+	background-position: -60px -20px;
+}
+
+.top_nav ul li.active{
+	background: #1C242C;
+}
+
+/*E=顶部导航栏*/
+
+/*S=当前位置*/
+.location{
+	width: 100%;
+	height: 36px;
+	line-height: 36px;
+	
+	margin: 0px auto;
+	margin-top:10px;
+	background: #fff;
+	
+	width: 1200px;	
+}
+
+.location i{
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	vertical-align: middle;
+	margin-left: 15px;
+	margin-top: -4px;
+	background: url(../img/spirits.png) no-repeat;
+	background-size:120px 120px ;/*精灵图压缩一倍*/
+	background-position: -24px -24px;
+	
+	
+}
+
+.location span:nth-of-type(1){
+	color:#2B3946;
+	display: inline-block;
+	height: 36px;
+	line-height: 36px;
+	padding-left: 5px;
+	padding-right: 5px;
+	font-size: 16px;
+}
+/*E=当前位置*/
+
+.main-content{
+	width: 1200px;
+	height: 520px;
+	background: white;
+	margin: 0px auto;
+}
+
+/*S=左侧导航栏*/
+.left-nav{
+	width: 180px;
+	height: 520px;
+	float: left;
+	background: #2B3946;
+}
+.left-nav ul{
+	margin-top: 20px;
+}
+
+.left-nav ul li{
+	width: 100%;
+	height: 35px;
+	line-height: 35px;
+	padding-left: 25px;
+	border-bottom: solid 1px #29343E;
+	
+}
+
+.left-nav ul li:hover{
+	border-left: solid 1px #171F24;
+	
+}
+
+.left-nav ul li:hover a{
+	color: #16B398;
+}
+
+.left-nav ul li a{
+	color: #fff;
+	font-size: 15px;
+}
+.left-nav ul li a span{
+	font-size: 18px;
+	font-weight: bold;
+	margin-right: 5px;
+}
+
+.left-nav ul li.active{
+	border-left: solid 1px #171F24;
+}
+
+.left-nav ul li.active a{
+	color: #16B398;
+}
+/*E=左侧导航栏*/
+
+/*S=右侧导航栏*/
+.right-main{
+	width: 1010px;
+	height: 510px;
+	float: right;
+	
+	border: solid 2px #999;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	margin: 5px;
+}
+
+/*E=右侧导航栏*/
